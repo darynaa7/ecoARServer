@@ -2,6 +2,7 @@ const express = require('express');
 
 const authRouter = require('../authentification/AuthRouter');
 const fileRouter = require('../file/FileRouter');
+require('dotenv').config();
 
 const db = require('../../data/DBase');
 const cors = require("cors");
@@ -20,13 +21,17 @@ const corsOptions = {
     serveClient: false
 };
 
-let mainSocket = {};
-let serverPort = 5000;
+let serverPort = process.env.PORT || 3000;
+let mainSocket;
 
+console.log("туткай")
 async function startDb(serverPort) {
     try {
+        console.log("туткай2")
+
         await db.authenticate();
         await db.sync();
+        console.log("туткай3")
 
         const app = express();
         const httpServer = require("http").Server(app)
