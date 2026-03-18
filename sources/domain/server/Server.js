@@ -20,8 +20,8 @@ const corsOptions = {
     serveClient: false
 };
 
-let mainSocket = {};
-let serverPort = 5000;
+let mainSocket;
+let serverPort = process.env.PORT || 3000;
 
 async function startDb(serverPort) {
     try {
