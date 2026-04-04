@@ -18,9 +18,9 @@ class AuthController {
 
     async register(req, res) {
         try {
-            const username = req.query.username;
-            const email = req.query.email;
-            const password = req.query.password;
+            const username = req.body.username;
+            const email = req.body.email;
+            const password = req.body.password;
 
             const candidate = await User.findOne({where: {username}});
             if (candidate) {
@@ -173,7 +173,6 @@ class AuthController {
 
             const { username, email, password } = req.body;
 
-            // 🔹 Оновлюємо тільки якщо поле передане
             if (username !== undefined && username !== null) {
                 thisUser.username = username;
             }
