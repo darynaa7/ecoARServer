@@ -3,9 +3,9 @@ const db = require('../../data/DBase');
 
 const User = db.define('User', {
     id: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
-        allowNull: false,
     },
     username: {
         type: DataTypes.STRING,

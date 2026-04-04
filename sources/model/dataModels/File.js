@@ -3,9 +3,9 @@ const db = require('../../data/DBase');
 
 const File = db.define('Files', {
     id: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
-        allowNull: false,
     },
     type: {
         type: DataTypes.STRING,

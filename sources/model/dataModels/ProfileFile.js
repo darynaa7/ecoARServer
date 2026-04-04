@@ -5,9 +5,9 @@ const File = require("./File");
 
 const ProfileFile = db.define('ProfileFiles', {
     id: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
-        allowNull: false,
     },
     userId: {
         type: DataTypes.STRING,

@@ -45,7 +45,8 @@ class AuthController {
                 token: token,
                 user: {
                     login: newUser.username,
-                    id: newUser.id
+                    id: newUser.id,
+                    email: newUser.email
                 }
             });
         } catch (e) {
@@ -56,8 +57,8 @@ class AuthController {
 
     async login(req, res) {
         try {
-            const username = req.query.username;
-            const password = req.query.password;
+            const username = req.body.username;
+            const password = req.body.password;
             console.log("1")
             const user = await User.findOne({where: {username}});
 
@@ -80,7 +81,8 @@ class AuthController {
                 token: token,
                 user: {
                     login: user.username,
-                    id: user.id
+                    id: user.id,
+                    email: user.email
                 }
             });
         } catch (e) {
@@ -111,7 +113,9 @@ class AuthController {
                 token: token,
                 user: {
                     login: user.username,
-                    id: user.id
+                    id: user.id,
+                    email: user.email
+
                 }
             });
         } catch (error) {
@@ -156,7 +160,7 @@ class AuthController {
             const authorizationHeader = req.headers["authorization"];
 
             if (!authorizationHeader) {
-                return res.status(403).json({message: 'User not authorized, no token, no header'});
+                return res.status(403).json({ message: 'User not authorized, no token, no header' });
             }
 
             const token = authorizationHeader.split(' ')[1];
@@ -164,25 +168,32 @@ class AuthController {
             const thisUser = await User.findOne({ where: { token } });
 
             if (!thisUser) {
-                return res.status(400).json({message: `There's no user with token ${token}`});
+                return res.status(400).json({ message: `There's no user with token ${token}` });
             }
 
-            const username = req.query.username;
-            const email = req.query.email;
-            const password = req.query.password;
+            const { username, email, password } = req.body;
 
-            const hashPassword = bcrypt.hashSync(password, 7);
+            // 🔹 Оновлюємо тільки якщо поле передане
+            if (username !== undefined && username !== null) {
+                thisUser.username = username;
+            }
 
-            thisUser.username = username
-            thisUser.email = email
-            thisUser.password = hashPassword
+            if (email !== undefined && email !== null) {
+                thisUser.email = email;
+            }
 
-            thisUser.save()
+            if (password !== undefined && password !== null && password !== '') {
+                const hashPassword = bcrypt.hashSync(password, 7);
+                thisUser.password = hashPassword;
+            }
 
-            return res.status(200).json();
+            await thisUser.save();
+
+            return res.status(200).json({ message: 'User updated successfully' });
+
         } catch (e) {
             console.log(e);
-            res.status(400).json({message: 'Error'});
+            res.status(400).json({ message: 'Error' });
         }
     }
 }
