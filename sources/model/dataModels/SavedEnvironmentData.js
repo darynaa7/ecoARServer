@@ -1,11 +1,17 @@
+// models/UserEnvironmentData.js
 const { DataTypes } = require('sequelize');
 const db = require('../../data/DBase');
 
-const EnvironmentData = db.define('EnvironmentData', {
+const UserEnvironmentData = db.define('UserEnvironmentData', {
     id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
+    },
+
+    userId: {
+        type: DataTypes.UUID,
+        allowNull: false,
     },
 
     lat: {
@@ -37,4 +43,4 @@ const EnvironmentData = db.define('EnvironmentData', {
     timestamps: true
 });
 
-module.exports = EnvironmentData;
+module.exports = UserEnvironmentData;

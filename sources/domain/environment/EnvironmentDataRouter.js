@@ -1,11 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const EnvironmentController = require('./EnvironmentDataController');
+const {fetchByLocation} = require("./EnvironmentDataController");
+const AuthManager = require('../authentification/AuthManager');
 
-router.post('/', EnvironmentController.create);
 
-router.get('/user/:userId', EnvironmentController.getByUser);
+router.post('/fetch', EnvironmentController.fetchByLocation);
 
-router.get('/', EnvironmentController.getByLocation);
+router.post('/user/fetch',  EnvironmentController.fetchAndSaveForUser);
+
+router.get('/user/history', AuthManager.authMiddleware, EnvironmentController.getUserHistory);
+
+module.exports = router;
 
 module.exports = router;

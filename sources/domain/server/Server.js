@@ -53,8 +53,7 @@ async function startDb(serverPort) {
 
         app.use("/auth", authRouter);
         app.use("/file", fileRouter)
-        app.use("/environment", environmentRouter)
-
+        app.use('/environment',  environmentRouter);
 
         io.on("connection", (socket) => {
             module.exports.mainSocket = socket
