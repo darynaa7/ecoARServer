@@ -10,12 +10,12 @@ const ProfileFile = db.define('ProfileFiles', {
         primaryKey: true,
     },
     userId: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
         unique: true,
         allowNull: false,
     },
     fileId: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
         allowNull: false,
     }
 }, {

@@ -75,6 +75,7 @@ async function startDb(serverPort) {
             console.log(e.message)
         })
     } catch (e) {
+        console.error("DB ERROR:", e);
         process.exit(1);
     }
 }
