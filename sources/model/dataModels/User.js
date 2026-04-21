@@ -30,6 +30,10 @@ const User = db.define('User', {
         defaultValue: "MALE",
         allowNull: false,
     },
+    refreshToken: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+    },
     token: {
         type: DataTypes.TEXT,
         allowNull: true,
