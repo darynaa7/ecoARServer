@@ -5,6 +5,7 @@ const controller = require('./AuthController')
 router.post('/register', controller.register)
 router.post('/login', controller.login)
 router.get('/check', controller.check)
+router.post('/refresh', controller.refresh);
 router.post('/logout', controller.logout)
 router.post('/updateUserData', controller.updateUserData)
 

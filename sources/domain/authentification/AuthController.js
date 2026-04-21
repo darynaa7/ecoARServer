@@ -132,8 +132,15 @@ class AuthController {
             user.refreshToken = tokens.refreshToken;
             await user.save();
 
-            return res.json(tokens);
-
+            return res.json({
+                accessToken: tokens.accessToken,
+                refreshToken: tokens.refreshToken,
+                user: {
+                    id: user.id,
+                    username: user.username,
+                    email: user.email
+                }
+            });
         } catch (e) {
             console.error(e);
             res.status(500).json({ message: "Refresh error" });
