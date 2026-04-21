@@ -3,6 +3,7 @@ const express = require('express');
 const authRouter = require('../authentification/AuthRouter');
 const fileRouter = require('../file/FileRouter');
 const environmentRouter = require('../environment/EnvironmentDataRouter');
+const mapRouter = require('../mapData/MapRouter');
 
 const db = require('../../data/DBase');
 const cors = require("cors");
@@ -53,7 +54,9 @@ async function startDb(serverPort) {
 
         app.use("/auth", authRouter);
         app.use("/file", fileRouter)
-        app.use('/environment',  environmentRouter);
+        app.use("/environment",  environmentRouter);
+        app.use("/map", mapRouter)
+
 
         io.on("connection", (socket) => {
             module.exports.mainSocket = socket
