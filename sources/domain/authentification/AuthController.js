@@ -64,7 +64,7 @@ class AuthController {
             });
 
         } catch (e) {
-            console.error(e);
+            console.error(e.message);
             res.status(500).json({ message: "Registration error" });
         }
     }
@@ -101,7 +101,7 @@ class AuthController {
             });
 
         } catch (e) {
-            console.error(e);
+            console.error(e.message);
             res.status(500).json({ message: "Login error" });
         }
     }
@@ -142,7 +142,7 @@ class AuthController {
                 }
             });
         } catch (e) {
-            console.error(e);
+            console.error(e.message);
             res.status(500).json({ message: "Refresh error" });
         }
     }
@@ -179,7 +179,7 @@ class AuthController {
             });
 
         } catch (e) {
-            console.error(e);
+            console.error(e.message);
             res.status(500).json({ message: "Check error" });
         }
     }
@@ -204,7 +204,7 @@ class AuthController {
             return res.json({ message: "Logged out" });
 
         } catch (e) {
-            console.error(e);
+            console.error(e.message);
             res.status(500).json({ message: "Logout error" });
         }
     }
@@ -239,7 +239,7 @@ class AuthController {
             return res.status(200).json({ message: 'User updated successfully' });
 
         } catch (e) {
-            console.log(e);
+            console.error(e.message);
             res.status(500).json({ message: 'Error' });
         }
     }
