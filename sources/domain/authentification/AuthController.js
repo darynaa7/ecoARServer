@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 const { Op } = require('sequelize');
 
-const ACCESS_SECRET = process.env.ACCESS_SECRET || "access_secret";
-const REFRESH_SECRET = process.env.REFRESH_SECRET || "refresh_secret";
+const ACCESS_SECRET = process.env.ACCESS_SECRET;
+const REFRESH_SECRET = process.env.REFRESH_SECRET;
 
 const generateTokens = (user) => {
     const payload = {
@@ -211,31 +211,25 @@ class AuthController {
 
     async updateUserData(req, res) {
         try {
-            const authorizationHeader = req.headers["authorization"];
+            const userId = req.user.id;
 
-            if (!authorizationHeader) {
-                return res.status(403).json({ message: 'User not authorized, no token, no header' });
-            }
-
-            const token = authorizationHeader.split(' ')[1];
-
-            const thisUser = await User.findOne({ where: { token } });
+            const thisUser = await User.findByPk(userId);
 
             if (!thisUser) {
-                return res.status(400).json({ message: `There's no user with token ${token}` });
+                return res.status(404).json({ message: 'User not found' });
             }
 
             const { username, email, password } = req.body;
 
-            if (username !== undefined && username !== null) {
+            if (username) {
                 thisUser.username = username;
             }
 
-            if (email !== undefined && email !== null) {
+            if (email) {
                 thisUser.email = email;
             }
 
-            if (password !== undefined && password !== null && password !== '') {
+            if (password) {
                 const hashPassword = bcrypt.hashSync(password, 7);
                 thisUser.password = hashPassword;
             }
@@ -246,7 +240,7 @@ class AuthController {
 
         } catch (e) {
             console.log(e);
-            res.status(400).json({ message: 'Error' });
+            res.status(500).json({ message: 'Error' });
         }
     }
 

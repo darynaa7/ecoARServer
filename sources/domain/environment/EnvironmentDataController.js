@@ -10,6 +10,7 @@ async function fetchByLocation(req, res) {
         if (!lat || !lon) {
             return res.status(400).json({ message: 'lat and lon required' });
         }
+        console.log(req.headers.authorization);
 
         const data = await getEnvironmentData(lat, lon);
 
