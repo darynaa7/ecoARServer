@@ -1,5 +1,6 @@
 const express = require('express');
 
+require('dotenv').config();
 const authRouter = require('../authentification/AuthRouter');
 const fileRouter = require('../file/FileRouter');
 const environmentRouter = require('../environment/EnvironmentDataRouter');
