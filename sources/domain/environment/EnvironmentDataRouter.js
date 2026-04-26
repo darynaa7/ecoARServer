@@ -7,9 +7,16 @@ const AuthManager = require('../authentification/AuthManager');
 
 router.post('/fetch', EnvironmentController.fetchByLocation);
 
-// router.post('/user/fetch',  EnvironmentController.fetchAndSaveForUser);
+router.post(
+    '/user/fetch',
+    AuthManager.authMiddleware,
+    EnvironmentController.fetchAndSaveForUser
+);
 
-// router.get('/user/history', AuthManager.authMiddleware, EnvironmentController.getUserHistory);
-
+router.get(
+    '/user/history',
+    AuthManager.authMiddleware,
+    EnvironmentController.getUserHistory
+);
 
 module.exports = router;
