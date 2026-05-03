@@ -32,13 +32,13 @@ async function fetchByLocation(req, res) {
 }
 
 
-async function fetchAndSaveForUser(req, res) {
+async function SaveForUser(req, res) {
     try {
         const userId = req.user?.id;
 
-        if (!userId) {
-            return res.status(401).json({ message: 'Unauthorized' });
-        }
+        // if (!userId) {
+        //     return res.status(401).json({ message: 'Unauthorized' });
+        // }
 
         const { lat, lon } = req.body;
 
@@ -107,6 +107,6 @@ async function getUserHistory(req, res) {
 
 module.exports = {
     fetchByLocation,
-    fetchAndSaveForUser,
+    SaveForUser: SaveForUser,
     getUserHistory
 };

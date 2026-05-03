@@ -8,9 +8,9 @@ const AuthManager = require('../authentification/AuthManager');
 router.post('/fetch', EnvironmentController.fetchByLocation);
 
 router.post(
-    '/user/fetch',
+    '/user/save',
     AuthManager.authMiddleware,
-    EnvironmentController.fetchAndSaveForUser
+    EnvironmentController.SaveForUser
 );
 
 router.get(
