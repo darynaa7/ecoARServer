@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const FileManager = require("./FileManager");
-const AuthManager = require("../authentification/AuthManager");
+const { v4: uuidv4 } = require('uuid');
 
 const FileType = {
     IMAGE: "image",
@@ -9,6 +9,63 @@ const FileType = {
 };
 
 class FileController {
+
+    async getProfileFile(req, res) {
+        try {
+            const userId = req.user.id;
+
+            if (!userId) return;
+
+            const profileFile = await FileManager.getProfileFile(userId);
+
+            if (!profileFile) {
+                return res.status(404).send("Profile file not found.");
+            }
+
+            const fileBuffer = fs.readFileSync(profileFile.path);
+
+            res.setHeader('Content-Type', 'image/jpeg');
+            res.send(fileBuffer);
+
+        } catch (err) {
+            console.log(err)
+            res.status(500).send("Internal Server Error");
+        }
+    }
+
+    async postProfileFile(req, res) {
+        try {
+            const userId = req.user.id;
+
+            if (!userId) return;
+
+            const file = req.file;
+
+            if (!file) {
+                return res.status(400).send("No file provided.");
+            }
+
+            const fileBytes = file.buffer;
+
+            const maxSize = 10 * 1024 * 1024;
+
+            if (fileBytes.length > maxSize) {
+                return res.status(406).send("File size must be under 10 MB.");
+            }
+
+            const result = await FileManager.saveProfileFile(userId, fileBytes);
+
+            if (!result) {
+                return res.status(500).send("Failed to save profile file.");
+            }
+
+            res.sendStatus(200);
+
+        } catch (err) {
+            console.log(err)
+            res.status(500).send("Internal Server Error");
+        }
+    }
 
     async getFile(req, res) {
         try {

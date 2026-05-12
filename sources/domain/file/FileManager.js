@@ -91,10 +91,99 @@ async function deleteFile(userId, fileId, type, klass) {
         console.error(err);
         return false;
     }
+
+
 }
 
+
+async function getProfileFile(userId) {
+    try {
+
+        const profileFile = await ProfileFile.findOne({
+            where: { userId }
+        });
+
+        if (!profileFile) return null;
+
+        const file = await File.findByPk(profileFile.fileId);
+
+        if (!file) return null;
+
+        const dirPath = getDirPath(userId, PROFILE_FILE_TYPE);
+
+        const filePath = path.join(dirPath, `${file.id}.jpg`);
+
+        if (!fs.existsSync(filePath)) {
+            return null;
+        }
+
+        return {
+            fileId: file.id,
+            path: filePath
+        };
+
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}
+
+async function saveProfileFile(userId, buffer) {
+    try {
+
+        const existingProfile = await ProfileFile.findOne({
+            where: {userId}
+        });
+
+        let fileId;
+
+        if (existingProfile) {
+            fileId = existingProfile.fileId;
+        } else {
+            fileId = uuidv4();
+        }
+
+        const dirPath = getDirPath(userId, PROFILE_FILE_TYPE);
+
+        fs.mkdirSync(dirPath, {recursive: true});
+
+        const filePath = path.join(dirPath, `${fileId}.jpg`);
+
+        fs.writeFileSync(filePath, buffer);
+
+        const existingFile = await File.findByPk(fileId);
+
+        if (existingFile) {
+            await File.update(
+                {type: "image"},
+                {where: {id: fileId}}
+            );
+        } else {
+            await File.create({
+                id: fileId,
+                type: "image"
+            });
+        }
+
+        if (!existingProfile) {
+            await ProfileFile.create({
+                id: uuidv4(),
+                userId,
+                fileId
+            });
+        }
+
+        return true;
+
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
 module.exports = {
     saveFile,
     getFile,
-    deleteFile
+    deleteFile,
+    getProfileFile,
+    saveProfileFile
 };
